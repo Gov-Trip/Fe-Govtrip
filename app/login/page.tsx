@@ -30,15 +30,27 @@ export default function LoginPage() {
     setIsLoading(true);
     setStatusMessage(null);
 
-    // Simulasi login autentikasi & pengalihan ke dashboard admin
+    // Smart role routing based on input
+    const lowerId = identifier.toLowerCase();
+    let targetRoute = "/admin";
+    if (lowerId.includes("super") || lowerId.includes("bambang") || lowerId.includes("root")) {
+      targetRoute = "/superadmin";
+    } else if (lowerId.includes("bendahara") || lowerId.includes("keuangan") || lowerId.includes("ratna")) {
+      targetRoute = "/bendahara";
+    } else if (lowerId.includes("atasan") || lowerId.includes("hendra")) {
+      targetRoute = "/atasan";
+    } else if (lowerId.includes("pegawai") || lowerId.includes("ocha") || lowerId.includes("liyana")) {
+      targetRoute = "/pegawai";
+    }
+
     setTimeout(() => {
       setIsLoading(false);
       setStatusMessage({
         type: "success",
-        text: "Login berhasil! Mengalihkan ke Dashboard...",
+        text: `Login berhasil! Mengalihkan ke Dashboard...`,
       });
-      router.push("/admin");
-    }, 800);
+      router.push(targetRoute);
+    }, 600);
   };
 
   return (
@@ -220,6 +232,49 @@ export default function LoginPage() {
           </button>
         </form>
 
+        {/* Demo Fast Navigation per Role */}
+        <div className="w-full mt-5 pt-4 border-t border-[#E8EEF3]">
+          <span className="text-[11.5px] text-[#64748B] block text-center mb-2 font-medium">
+            Akses Cepat Demo Peran:
+          </span>
+          <div className="grid grid-cols-2 gap-2 text-center text-[12px]">
+            <Link
+              href="/admin"
+              className="py-1.5 px-2 bg-[#F1F7FB] hover:bg-[#E3F0FA] text-[#0066B3] rounded-lg font-medium transition-colors"
+            >
+              Admin
+            </Link>
+            <Link
+              href="/pegawai"
+              className="py-1.5 px-2 bg-[#F1F7FB] hover:bg-[#E3F0FA] text-[#0066B3] rounded-lg font-medium transition-colors"
+            >
+              Pegawai
+            </Link>
+            <Link
+              href="/atasan"
+              className="py-1.5 px-2 bg-[#F1F7FB] hover:bg-[#E3F0FA] text-[#0066B3] rounded-lg font-medium transition-colors"
+            >
+              Atasan
+            </Link>
+            <Link
+              href="/bendahara"
+              className="py-1.5 px-2 bg-[#FFF1D1] hover:bg-[#fee7b3] text-[#8A5A00] rounded-lg font-semibold transition-colors"
+            >
+              Bendahara
+            </Link>
+            <Link
+              href="/superadmin"
+              className="col-span-2 py-1.5 px-2 bg-[#123B72] hover:bg-[#0066B3] text-white rounded-lg font-semibold transition-colors flex items-center justify-center gap-1.5"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
+                <path d="m9 12 2 2 4-4" />
+              </svg>
+              Super Administrator
+            </Link>
+          </div>
+        </div>
+
         {/* Footer: Belum punya akun? Daftar */}
         <div className="flex items-center justify-center pt-4 text-[12.5px] leading-[19.38px]">
           <span className="text-[#64748B]">Belum punya akun?&nbsp;</span>
@@ -234,4 +289,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
